@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, forwardRef, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, forwardRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl, ControlValueAccessor, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { MessageService } from '../../../services/message.service';
 
 @Component({
   selector: 'shared-image-upload-control',
@@ -19,17 +20,24 @@ import { Subscription } from 'rxjs';
     }
   ]
 })
-export class ImageUploadControlComponent implements ControlValueAccessor, OnDestroy, OnInit {
+export class ImageUploadControlComponent implements AfterViewInit, ControlValueAccessor, OnDestroy, OnInit {
   disabled: boolean;
   firstChange = false;
   imageGroup: FormGroup;
   @Input() label: string;
+  @Input() maxFileSize = '1MB';
+  private maxFileSizeBytes: number;
   subscriptions: Subscription[] = [];
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private message: MessageService
   ) {
 
+  }
+
+  ngAfterViewInit() {
+    this.maxFileSizeBytes = this.calculateSize(this.maxFileSize);
   }
 
   ngOnDestroy(): void {
@@ -90,6 +98,12 @@ export class ImageUploadControlComponent implements ControlValueAccessor, OnDest
     const file = event.target.files[0];
     const reader = new FileReader();
 
+    if (file.size > this.maxFileSizeBytes) {
+      this.message.show(`Tamaño de imagen mayor al permitido (${this.maxFileSize}).`);
+
+      return;
+    }
+
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.value = {
@@ -101,6 +115,26 @@ export class ImageUploadControlComponent implements ControlValueAccessor, OnDest
   }
 
   // Custom private methods
+
+  private calculateSize(value: string) {
+    value = value.replace(/\s/g, '');
+
+    const byte = 1024;
+    const size = value.match(/^\d+(\.\d+)?/)[0];
+    const unit = value.substr(size.length).toUpperCase();
+    let sizeValue = parseFloat(size);
+
+    switch(unit) {
+      case 'KB':
+        sizeValue *= 1000 * byte;
+        break;
+      case 'MB':
+        sizeValue *= 1000000 * byte;
+        break;
+    }
+
+    return sizeValue;
+  }
 
   private imageValidator(): ValidatorFn {
     return (group: FormGroup): ValidationErrors => {

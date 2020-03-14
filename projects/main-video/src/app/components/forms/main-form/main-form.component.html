@@ -1,0 +1,82 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<form autocomplete="off" [formGroup]="mainForm" class="col-12 col-md-12 col-sm-12">
+
+  <input formControlName="id" type="hidden" />
+
+  <div class="row">
+    <div class="col-12 col-md-12 col-sm-12">
+      <mat-form-field >
+        <input formControlName="title" matInput maxlength="255" placeholder="Título *" />
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <br>
+ <div class="row">
+  <div class="col-12 col-md-6 col-sm-12">
+    <mat-radio-group formControlName="type" >
+      <mat-radio-button class="example-radio-button" value="enlace" [checked]="typeSelect=='enlace'" >Enlace de video</mat-radio-button>
+      <mat-radio-button class="example-radio-button" value="idvideo" [checked]="typeSelect==null">Id Video de youtube</mat-radio-button>
+    </mat-radio-group>
+
+  </div>
+
+  <div class="col-12 col-md-6 col-sm-12">
+    <mat-form-field *ngIf="type.value === 'enlace' || typeSelect=='enlace'">
+      <input formControlName="urlVideo" matInput maxlenth="255" placeholder="Enlace del video *" />
+      <mat-error>
+        <ng-container *ngIf="urlVideoCtrl.hasError('required')">
+            Campo obligatorio
+        </ng-container>
+        <ng-container *ngIf="urlVideoCtrl.hasError('pattern')">
+          Esta URL no es valida
+      </ng-container>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="type.value === 'idvideo'|| typeSelect==null">
+      <input formControlName="idVideo" matInput maxlength="255" placeholder="https://www.youtube.com/watch?v= *" />
+      <mat-error>
+        <ng-container *ngIf="idVideoCtrl.hasError('required')">
+            Campo obligatorio
+        </ng-container>
+
+      </mat-error>
+    </mat-form-field>
+  </div>
+ </div>
+ <br>
+
+<div class="row">
+  <div class="col-6 col-md-6 col-sm-12">
+  <!--  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="imageSelect" [ngModelOptions]="{standalone: true}">
+      <mat-radio-button class="example-radio-button" *ngFor="let ima of images" [value]="ima" [checked]="ima==imageSelect" >
+        {{ima}}
+      </mat-radio-button>
+    </mat-radio-group> -->
+    <mat-radio-group formControlName="imagetype" >
+      <mat-radio-button class="example-radio-button" value="imagenvideo" [checked]="imageSelect=='imagenvideo'" >Imagen Video</mat-radio-button>
+      <mat-radio-button class="example-radio-button" value="imagennueva" [checked]="imageSelect==null">Imagen Nueva</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div class="col-6 col-md-6 col-sm-12">
+    <shared-image-upload-control #image formControlName="image" *ngIf="imageSelect==null"></shared-image-upload-control>
+  </div>
+
+</div>
+<br>
+
+  <div class="col-6 col-md-6 col-sm-12 myCheckbox" >
+    <mat-checkbox formControlName="setVideo" value="1" (change)="updateMainController()">¿Elegir este video cómo principal?</mat-checkbox>
+    <br><span *ngIf="setVideoCtrl.value==1" style="color: red; font-size: 10px;">
+      Si existe un video principal se reemplazará por este
+    </span>
+    <span *ngIf="mainCheck">
+      Ya existe un video definido cómo principal
+    </span>
+
+  </div>
+
+</form>
+

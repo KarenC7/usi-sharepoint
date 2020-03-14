@@ -1,0 +1,61 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.mat-form-field{
+  width: 100%;
+}
+
+.percent{
+  width: 50%;
+}
+.mat-table {
+  width: 100%;
+}
+
+.p1{
+  padding: 25px;
+}
+
+.radios{
+  padding-top: 10%;
+}
+
+#cdk-overlay-3{
+  width: auto;
+  min-width: 800px!important;
+}
+
+.mat-radio-label-content, .mat-checkbox-label{
+  font-weight: 400;
+}
+
+
+section.ng-untouched{
+  margin-top: -3em;
+}
+
+div.row{
+  display: flex;
+  // justify-content: center;
+   align-items: center;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color:  #94938d;
+}
+.mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple{
+  background-color: #94938d;
+}
+
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #94938d;
+}
+
+div.myCheckbox{
+  padding: 0!important;
+}
+
+
+.mat-dialog-container {
+  width: auto;
+  min-width: 800px!important;
+}
